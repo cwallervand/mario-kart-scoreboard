@@ -24,7 +24,7 @@ export const createTable = pgTableCreator(
 export const players = createTable("players", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 128 }).notNull(),
-  handle: varchar("handle", { length: 128 }),
+  handle: varchar("handle", { length: 128 }).unique(),
 });
 
 export const tracks = createTable("tracks", {

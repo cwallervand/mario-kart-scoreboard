@@ -45,14 +45,16 @@ export const createRace = async (formData: FormData) => {
 };
 
 export const createPlayer = async (formData: FormData) => {
-  console.log("createPlayer", formData);
-
   const validatedFields = CreatePlayerFormSchema.parse(
     Object.fromEntries(formData.entries()),
   );
+  try {
+    await db.insert(players).values(validatedFields);
+  } catch (error) {
+    console.log("error", error);
+    throw new Error("Could not create player");
+  }
 
-  console.log("validatedFields", validatedFields);
-  await db.insert(players).values(validatedFields);
   revalidatePath("/players");
   redirect("/players");
 };

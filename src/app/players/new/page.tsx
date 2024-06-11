@@ -1,9 +1,6 @@
-import { db } from "~/server/db";
 import { createPlayer } from "~/server/serverActions";
 
-const RegisterPlayerPage = () => {
-  console.log("RegisterPlayerPage");
-
+const CreatePlayerPage = () => {
   return (
     <main>
       <h1>Register new player</h1>
@@ -22,4 +19,4 @@ const RegisterPlayerPage = () => {
   );
 };
 
-export default RegisterPlayerPage;
+export default CreatePlayerPage;
