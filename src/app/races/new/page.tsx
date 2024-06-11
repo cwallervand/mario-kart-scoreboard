@@ -20,7 +20,7 @@ const RegisterRacePage = async () => {
         <br />
         <fieldset>
           <legend>Player 1</legend>
-          <PlayerSelect name="player-p1" />
+          <PlayerSelect name="id-p1" />
           <FormSelect
             label="Finishing position"
             name="finishing-position-p1"
@@ -30,7 +30,7 @@ const RegisterRacePage = async () => {
         <br />
         <fieldset>
           <legend>Player 2</legend>
-          <PlayerSelect name="player-p2" />
+          <PlayerSelect name="id-p2" />
           <FormSelect
             label="Finishing position"
             name="finishing-position-p2"
@@ -40,7 +40,7 @@ const RegisterRacePage = async () => {
         <br />
         <fieldset>
           <legend>Player 3</legend>
-          <PlayerSelect name="player-p3" />
+          <PlayerSelect name="id-p3" />
           <FormSelect
             label="Finishing position"
             name="finishing-position-p3"
@@ -50,7 +50,7 @@ const RegisterRacePage = async () => {
         <br />
         <fieldset>
           <legend>Player 4</legend>
-          <PlayerSelect name="player-p4" />
+          <PlayerSelect name="id-p4" />
           <FormSelect
             label="Finishing position"
             name="finishing-position-p4"

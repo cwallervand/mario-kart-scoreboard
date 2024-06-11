@@ -33,7 +33,7 @@ export const tracks = createTable("tracks", {
 
 export const races = createTable("races", {
   id: serial("id").primaryKey(),
-  trackId: varchar("trackId")
+  track: varchar("trackId")
     .notNull()
     .references(() => tracks.name),
 });
