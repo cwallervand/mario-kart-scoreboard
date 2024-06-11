@@ -31,18 +31,21 @@ export const tracks = createTable("tracks", {
   name: varchar("name", { length: 128 }).primaryKey(),
 });
 
-// export const races = createTable("races", {
-//   id: serial("id").primaryKey(),
-// });
-
-export const raceParticipations = createTable("race_participations", {
+export const races = createTable("races", {
   id: serial("id").primaryKey(),
-  playerId: integer("playerId")
-    .notNull()
-    .references(() => players.id),
   trackId: varchar("trackId")
     .notNull()
     .references(() => tracks.name),
+});
+
+export const raceParticipations = createTable("race_participations", {
+  id: serial("id").primaryKey(),
+  raceId: integer("raceId")
+    .notNull()
+    .references(() => races.id),
+  playerId: integer("playerId")
+    .notNull()
+    .references(() => players.id),
   score: integer("score").notNull(),
   finishingPosition: integer("finishingPosition").notNull(),
 });

@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { db } from "~/server/db";
-import { players } from "~/server/db/schema";
+import { players, races } from "~/server/db/schema";
 
 const PlayerSchema = z.object({
   id: z.string(),
@@ -41,7 +41,6 @@ export const createRace = async (formData: FormData) => {
   );
 
   console.log("validatedFields", validatedFields);
-  return true;
 };
 
 export const createPlayer = async (formData: FormData) => {
@@ -52,6 +51,9 @@ export const createPlayer = async (formData: FormData) => {
     await db.insert(players).values(validatedFields);
   } catch (error) {
     console.log("error", error);
+    // return {
+    //   message: "Could not create player",
+    // };
     throw new Error("Could not create player");
   }
 
