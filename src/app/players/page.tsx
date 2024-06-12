@@ -1,5 +1,6 @@
 import { db } from "~/server/db";
-import Link from "next/link";
+import "next/link";
+import { GoTo } from "~/components/GoTo";
 
 const PlayersPage = async () => {
   const players = await db.query.players.findMany();
@@ -7,7 +8,7 @@ const PlayersPage = async () => {
   return (
     <main>
       <h1>Players</h1>
-      <Link href="/players/new">Register new player</Link>
+      <GoTo href="/players/new">Register new player</GoTo>
       <table className="w-full">
         <thead>
           <tr>

@@ -7,6 +7,7 @@ import { PlayerSelect } from "~/components/PlayerSelect";
 import { finishingPositionsWithScore } from "~/app/lib/utils";
 import { db } from "~/server/db";
 import { SubmitButton } from "~/components/SubmitButton";
+import { GoTo } from "~/components/GoTo";
 
 const RegisterRacePage = async () => {
   const players = await db.query.players.findMany();
@@ -60,7 +61,7 @@ const NoPlayers = () => (
   <div>
     <p>Woops, no players are registered.</p>
     <p>
-      <Link href="/players/new">Create a new player</Link>
+      <GoTo href="/players/new">Create a new player</GoTo>
     </p>
   </div>
 );
