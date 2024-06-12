@@ -9,7 +9,7 @@ const prettifyTrackName = (trackName: string) => {
   return prettifiedTrackName;
 };
 
-export const TracksSelect = async () => {
+export const TracksSelect = async ({ ...rest }) => {
   const tracks = await db.query.tracks.findMany();
 
   const trackSelectOptions = tracks.map((track) => ({
@@ -17,5 +17,12 @@ export const TracksSelect = async () => {
     label: prettifyTrackName(track.name),
   }));
 
-  return <FormSelect label="Track" name="track" options={trackSelectOptions} />;
+  return (
+    <FormSelect
+      label="Track"
+      name="track"
+      options={trackSelectOptions}
+      {...rest}
+    />
+  );
 };

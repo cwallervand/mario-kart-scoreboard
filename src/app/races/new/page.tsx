@@ -6,69 +6,26 @@ import { TracksSelect } from "~/components/TracksSelect";
 import { PlayerSelect } from "~/components/PlayerSelect";
 import { finishingPositionsWithScore } from "~/app/lib/utils";
 import { db } from "~/server/db";
+import { SubmitButton } from "~/components/SubmitButton";
 
 const RegisterRacePage = async () => {
   const players = await db.query.players.findMany();
-  console.log("players", players);
-
-  const finishingPositions = Object.keys(finishingPositionsWithScore);
-
-  const finishingPositionSelectOptions = finishingPositions.map((fp) => ({
-    value: fp,
-    label: fp,
-  }));
 
   return (
-    <main>
+    <main className="flex w-full flex-col">
       {players.length == 0 ? (
         <NoPlayers />
       ) : (
         <>
           <h1>Register new race</h1>
           <form action={createRace}>
-            <TracksSelect />
-            <br />
-            <fieldset>
-              <legend>Player 1</legend>
-              <PlayerSelect name="id-p1" />
-              <FormSelect
-                label="Finishing position"
-                name="finishing-position-p1"
-                options={finishingPositionSelectOptions}
-              />
-            </fieldset>
-            <br />
-            <fieldset>
-              <legend>Player 2</legend>
-              <PlayerSelect name="id-p2" />
-              <FormSelect
-                label="Finishing position"
-                name="finishing-position-p2"
-                options={finishingPositionSelectOptions}
-              />
-            </fieldset>
-            <br />
-            <fieldset>
-              <legend>Player 3</legend>
-              <PlayerSelect name="id-p3" />
-              <FormSelect
-                label="Finishing position"
-                name="finishing-position-p3"
-                options={finishingPositionSelectOptions}
-              />
-            </fieldset>
-            <br />
-            <fieldset>
-              <legend>Player 4</legend>
-              <PlayerSelect name="id-p4" />
-              <FormSelect
-                label="Finishing position"
-                name="finishing-position-p4"
-                options={finishingPositionSelectOptions}
-              />
-            </fieldset>
+            <TracksSelect className="mb-6" />
+            <PlayerFieldset playerNumber="1" />
+            <PlayerFieldset playerNumber="2" />
+            <PlayerFieldset playerNumber="3" />
+            <PlayerFieldset playerNumber="4" />
 
-            <button type="submit">Submit</button>
+            <SubmitButton />
           </form>
         </>
       )}
@@ -77,6 +34,27 @@ const RegisterRacePage = async () => {
 };
 
 export default RegisterRacePage;
+
+const PlayerFieldset = ({ playerNumber }: { playerNumber: string }) => {
+  const finishingPositions = Object.keys(finishingPositionsWithScore);
+
+  const finishingPositionSelectOptions = finishingPositions.map((fp) => ({
+    value: fp,
+    label: fp,
+  }));
+
+  return (
+    <fieldset className="mb-12">
+      <legend className="text-lg">Player {playerNumber}</legend>
+      <PlayerSelect name={`id-p${playerNumber}`} className="mb-3" />
+      <FormSelect
+        label="Finishing position"
+        name={`finishing-position-p${playerNumber}`}
+        options={finishingPositionSelectOptions}
+      />
+    </fieldset>
+  );
+};
 
 const NoPlayers = () => (
   <div>

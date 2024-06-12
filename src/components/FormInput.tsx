@@ -1,3 +1,5 @@
+import { FormLabel } from "~/components/FormLabel";
+
 type InputType = "text" | "number" | "email" | "password";
 
 interface FormInputProps {
@@ -10,11 +12,12 @@ interface FormInputProps {
 export const FormInput = ({ name, type, label, className }: FormInputProps) => {
   return (
     <div className={`flex w-full flex-col ${className}`}>
-      <label htmlFor={name}>{label}</label>
+      <FormLabel name={name} label={label} />
+
       <input
         type={type ?? "text"}
         name={name}
-        className="border-1 w-full rounded-full border border-black px-4 py-2"
+        className="w-full rounded-full border border-black/50 px-4 py-2"
       />
     </div>
   );
