@@ -8,7 +8,10 @@ interface LinkProps {
 
 export const GoTo = ({ href, children }: LinkProps) => {
   return (
-    <Link href={href}>
+    <Link
+      href={href}
+      className="decoration-wavy decoration-1 underline-offset-4 hover:underline"
+    >
       <div className="flex items-center">
         <span>{children}</span>
         <span>

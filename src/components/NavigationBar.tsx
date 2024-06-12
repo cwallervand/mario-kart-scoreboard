@@ -15,16 +15,16 @@ const NavigationBar = () => {
   const pathname = usePathname();
 
   return (
-    <nav className="flex flex-row items-center justify-around text-sm md:flex-col">
+    <nav className="font-mario flex flex-row items-center justify-around text-sm md:flex-col">
       {links.map((link) => {
         return (
           <Link
             key={link.label}
             href={link.href}
             className={clsx(
-              "flex h-[48px] grow items-center justify-center gap-2 self-stretch  p-2 text-sm hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-center md:p-2 md:px-3",
+              "text-stroke text-stroke-width-1 flex h-[48px] grow items-center justify-center gap-2 self-stretch p-2 text-lg decoration-wavy decoration-1 underline-offset-4 hover:text-xl hover:underline md:flex-none md:justify-center md:p-2 md:px-3",
               {
-                "bg-sky-100 text-blue-600": pathname === link.href,
+                underline: pathname === link.href,
               },
             )}
           >
