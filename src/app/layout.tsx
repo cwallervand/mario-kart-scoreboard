@@ -17,14 +17,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
-        <header className="w-full bg-green-100 p-4">
+        <header className="w-full bg-green-100 p-6">
           Mario Kart Scoreboard
         </header>
         <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
           <div className="w-full flex-none md:w-48">
             <NavigationBar />
           </div>
-          <div className="flex flex-grow bg-red-100 p-6 md:overflow-y-auto md:p-12">
+          <div className="flex flex-grow p-6 md:overflow-y-auto md:p-12">
             {children}
           </div>
         </div>

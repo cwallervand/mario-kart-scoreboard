@@ -6,7 +6,7 @@ interface FormSelectProps {
 
 export const FormSelect = ({ label, name, options }: FormSelectProps) => {
   return (
-    <div>
+    <div className="flex w-full flex-row">
       <label htmlFor={name}>{label}</label>
       <select name={name}>
         {options.map((option) => (
