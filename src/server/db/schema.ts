@@ -43,6 +43,9 @@ export const races = createTable("races", {
   track: varchar("track")
     .notNull()
     .references(() => tracks.name),
+  date: timestamp("date", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
 });
 
 export const raceParticipations = createTable(
