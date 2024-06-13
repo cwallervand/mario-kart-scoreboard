@@ -17,11 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body className="antialiased">
-        <header className="underline-wavy decoration-3 w-full bg-[#E52521] p-3 font-mario text-xl text-white shadow sm:p-6 sm:text-4xl">
+        <header className="underline-wavy decoration-3 w-full bg-[#E52521] p-3 text-center font-mario text-xl text-white shadow sm:p-6 sm:text-4xl md:text-left">
           Mario Kart Scoreboard
         </header>
         <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-          <div className="w-full flex-none bg-[#E52521]/60 md:w-48 md:shadow">
+          <div className="w-full flex-none bg-[#E52521]/65 md:w-48 md:shadow">
             <NavigationBar />
           </div>
           <div className="flex flex-grow p-6 md:overflow-y-auto md:p-8">
