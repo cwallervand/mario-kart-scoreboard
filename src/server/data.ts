@@ -1,6 +1,6 @@
 import { db } from "~/server/db";
 
-import { sql, eq } from "drizzle-orm";
+import { sql, eq, asc, desc } from "drizzle-orm";
 // import { unstable_noStore as noStore } from "next/cache";
 import {
   players as playersSchema,
@@ -30,8 +30,9 @@ export const getAllTimeLeaderboard = async (): Promise<Player[]> => {
         name: sql`${playersSchema.name}`.mapWith(String),
         playerId: sql`${raceParticipations.playerId}`.mapWith(String),
         avgScore: sql`avg(${raceParticipations.score})`.mapWith(Number),
-        avgFinishingPosition:
-          sql`avg(${raceParticipations.finishingPosition})`.mapWith(Number),
+        avgFinishingPosition: sql`avg(${raceParticipations.finishingPosition})`
+          .mapWith(Number)
+          .as("avgFinishingPosition"),
         handle: playersSchema.handle,
       })
       .from(raceParticipations)
@@ -39,7 +40,11 @@ export const getAllTimeLeaderboard = async (): Promise<Player[]> => {
         playersSchema,
         eq(playersSchema.id, raceParticipations.playerId),
       )
-      .groupBy(sql`${raceParticipations.playerId},${playersSchema.id}`);
+
+      .groupBy(sql`${raceParticipations.playerId},${playersSchema.id}`)
+      .orderBy(
+        sql`AVG(${raceParticipations.score}) desc, AVG(${raceParticipations.finishingPosition}) asc`,
+      );
 
     const players = queryResult.map(
       (row) =>

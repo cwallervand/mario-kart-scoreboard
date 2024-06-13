@@ -7,6 +7,10 @@
   src: url("./font/SuperMario256.ttf");
 }
 
+main {
+  @apply flex w-full flex-col items-center;
+}
+
 h1 {
   @apply text-stroke text-stroke-width-2 text-stroke mb-10 hidden font-mario text-3xl font-bold underline decoration-wavy decoration-2 underline-offset-4 md:block;
 }
