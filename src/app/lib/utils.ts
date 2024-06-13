@@ -18,3 +18,7 @@ export const finishingPositionsWithScore: PositionWithScore = {
 export const getRaceScore = (finishingPosition: string | number): number => {
   return finishingPositionsWithScore[finishingPosition] ?? 0;
 };
+
+export const prettifyPlayerName = (name: string, handle?: string) => {
+  return `${name}${handle ? ` (${handle})` : ""}`;
+};
