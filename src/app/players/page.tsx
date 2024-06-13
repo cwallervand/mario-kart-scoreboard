@@ -1,13 +1,14 @@
 import { db } from "~/server/db";
 import "next/link";
 import { GoTo } from "~/components/GoTo";
+import { Heading } from "~/components/Heading";
 
 const PlayersPage = async () => {
   const players = await db.query.players.findMany();
   console.log(players);
   return (
     <main>
-      <h1>Players</h1>
+      <Heading level={1}>Players</Heading>
       <GoTo href="/players/new">Register new player</GoTo>
       <table className="w-full">
         <thead>

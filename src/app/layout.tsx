@@ -21,7 +21,7 @@ export default function RootLayout({
           Mario Kart Scoreboard
         </header>
         <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-          <div className="w-full flex-none bg-[#E52521]/65 md:w-48 md:shadow">
+          <div className="w-full flex-none bg-[#E52521]/65 md:w-48 md:p-6 md:shadow">
             <NavigationBar />
           </div>
           <div className="flex flex-grow p-6 md:overflow-y-auto md:p-8">

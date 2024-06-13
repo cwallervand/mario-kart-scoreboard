@@ -6,7 +6,7 @@ import Link from "next/link";
 import clsx from "clsx";
 
 const links = [
-  { href: "/", label: "Leaderboard" },
+  { href: "/", label: "Stats" },
   { href: "/races", label: "Races" },
   { href: "/players", label: "Players" },
 ];

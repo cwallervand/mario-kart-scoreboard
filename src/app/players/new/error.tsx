@@ -1,9 +1,10 @@
 "use client";
+import { Heading } from "~/components/Heading";
 
 const CreatePlayerErrorPage = ({ reset }: { reset: () => void }) => {
   return (
     <main>
-      <h1>Woops!</h1>
+      <Heading level={1}>Woops!</Heading>
       <button onClick={() => reset()}>Try again</button>
     </main>
   );

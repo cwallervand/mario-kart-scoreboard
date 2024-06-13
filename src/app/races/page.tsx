@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Heading } from "~/components/Heading";
 
 import { db } from "~/server/db";
 import { GoTo } from "~/components/GoTo";
@@ -8,7 +8,7 @@ const PlayersPage = async () => {
   console.log(players);
   return (
     <main>
-      <h1>Races</h1>
+      <Heading level={1}>Races</Heading>
       <GoTo href="/races/new">Register new race</GoTo>
     </main>
   );

@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { createRace } from "~/server/serverActions";
 import { FormSelect } from "~/components/FormSelect";
 import { TracksSelect } from "~/components/TracksSelect";
@@ -8,6 +6,7 @@ import { finishingPositionsWithScore } from "~/app/lib/utils";
 import { db } from "~/server/db";
 import { SubmitButton } from "~/components/SubmitButton";
 import { GoTo } from "~/components/GoTo";
+import { Heading } from "~/components/Heading";
 
 const RegisterRacePage = async () => {
   const players = await db.query.players.findMany();
@@ -18,7 +17,7 @@ const RegisterRacePage = async () => {
         <NoPlayers />
       ) : (
         <>
-          <h1>Register new race</h1>
+          <Heading level={1}>Register new race</Heading>
           <form action={createRace}>
             <TracksSelect className="mb-6" />
             <PlayerFieldset playerNumber="1" />

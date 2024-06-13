@@ -11,10 +11,6 @@ main {
   @apply flex w-full flex-col items-center;
 }
 
-h1 {
-  @apply text-stroke text-stroke-width-2 text-stroke underline-wavy mb-10 hidden font-mario text-3xl font-bold decoration-2 md:block;
-}
-
 .text-stroke {
   color: inherit;
   -webkit-text-fill-color: white; /* Will override color (regardless of order) */

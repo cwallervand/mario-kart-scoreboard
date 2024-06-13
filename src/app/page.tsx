@@ -1,11 +1,13 @@
 import { getAllTimeLeaderboard } from "~/server/data";
 import { prettifyPlayerName } from "./lib/utils";
+import { Heading } from "~/components/Heading";
 
 export default async function ScoreboardPage() {
   const leaderboard = await getAllTimeLeaderboard();
   return (
     <main className="flex w-full flex-col items-center">
-      <h1>All-time leaderboard</h1>
+      <Heading level={1}>All the stats</Heading>
+      <Heading level={2}>All-time leaderboard</Heading>
       <table className="w-full table-auto">
         <thead>
           <tr className="text-stroke text-stroke-width-1 h-12 align-top font-mario md:text-xl">
@@ -37,9 +39,5 @@ const TableHead = ({
   className?: string;
   children: React.ReactNode;
 }) => (
-  <th
-    className={`underline decoration-wavy decoration-1 underline-offset-4 ${className}`}
-  >
-    {children}
-  </th>
+  <th className={`underline-wavy decoration-1 ${className}`}>{children}</th>
 );
