@@ -77,6 +77,7 @@ export const createRace = async (formData: FormData) => {
       ];
 
       console.log("raceParticipationsData", raceParticipationsData);
+      // TODO: If this fails, delete teh created race
       await db.insert(raceParticipations).values(raceParticipationsData);
     }
   } catch (error) {

@@ -8,6 +8,7 @@ import {
   text,
   timestamp,
   varchar,
+  unique,
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 
@@ -21,11 +22,17 @@ export const createTable = pgTableCreator(
   (name) => `mario-kart-scoreboard_${name}`,
 );
 
-export const players = createTable("players", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 128 }).notNull(),
-  handle: varchar("handle", { length: 128 }).unique(),
-});
+export const players = createTable(
+  "players",
+  {
+    id: serial("id").primaryKey(),
+    name: varchar("name", { length: 128 }).notNull(),
+    handle: varchar("handle", { length: 128 }),
+  },
+  (p) => ({
+    uniqueNameAndHandle: unique("uniqueNameAndHandle").on(p.name, p.handle),
+  }),
+);
 
 export const tracks = createTable("tracks", {
   name: varchar("name", { length: 128 }).primaryKey(),
@@ -38,17 +45,27 @@ export const races = createTable("races", {
     .references(() => tracks.name),
 });
 
-export const raceParticipations = createTable("race_participations", {
-  id: serial("id").primaryKey(),
-  raceId: integer("raceId")
-    .notNull()
-    .references(() => races.id),
-  playerId: integer("playerId")
-    .notNull()
-    .references(() => players.id),
-  score: integer("score").notNull(),
-  finishingPosition: integer("finishingPosition").notNull(),
-});
+export const raceParticipations = createTable(
+  "race_participations",
+  {
+    id: serial("id").primaryKey(),
+    raceId: integer("raceId")
+      .notNull()
+      .references(() => races.id),
+    playerId: integer("playerId")
+      .notNull()
+      .references(() => players.id),
+    score: integer("score").notNull(),
+    finishingPosition: integer("finishingPosition").notNull(),
+  },
+  (t) => ({
+    uniquePlayers: unique("uniquePlayers").on(t.raceId, t.playerId),
+    uniqueFinishingPositions: unique("uniqueFinishingPositions").on(
+      t.raceId,
+      t.finishingPosition,
+    ),
+  }),
+);
 
 // export const playerRaceRelations = relations(players, ({ many }) => ({
 //   races: many(races),
