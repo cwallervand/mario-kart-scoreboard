@@ -12,7 +12,7 @@ main {
 }
 
 h1 {
-  @apply text-stroke text-stroke-width-2 text-stroke mb-10 hidden font-mario text-3xl font-bold underline decoration-wavy decoration-2 underline-offset-4 md:block;
+  @apply text-stroke text-stroke-width-2 text-stroke underline-wavy mb-10 hidden font-mario text-3xl font-bold decoration-2 md:block;
 }
 
 .text-stroke {
@@ -27,4 +27,8 @@ h1 {
 
 .text-stroke-width-2 {
   -webkit-text-stroke-width: 2px;
+}
+
+.underline-wavy {
+  @apply underline decoration-wavy underline-offset-4;
 }
