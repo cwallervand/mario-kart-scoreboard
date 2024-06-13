@@ -6,7 +6,7 @@ import Link from "next/link";
 import clsx from "clsx";
 
 const links = [
-  { href: "/", label: "Scoreboard" },
+  { href: "/", label: "Leaderboard" },
   { href: "/races", label: "Races" },
   { href: "/players", label: "Players" },
 ];
@@ -15,7 +15,7 @@ const NavigationBar = () => {
   const pathname = usePathname();
 
   return (
-    <nav className="font-mario flex flex-row items-center justify-around text-sm md:flex-col">
+    <nav className="flex flex-row items-center justify-around font-mario text-sm md:flex-col">
       {links.map((link) => {
         return (
           <Link

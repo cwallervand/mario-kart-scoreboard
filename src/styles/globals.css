@@ -8,7 +8,7 @@
 }
 
 h1 {
-  @apply font-mario text-stroke text-stroke-width-2 text-stroke mb-6 text-3xl font-bold underline decoration-wavy decoration-2 underline-offset-4;
+  @apply text-stroke text-stroke-width-2 text-stroke mb-10 hidden font-mario text-3xl font-bold underline decoration-wavy decoration-2 underline-offset-4 md:block;
 }
 
 .text-stroke {
