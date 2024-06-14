@@ -7,10 +7,6 @@
   src: url("./font/SuperMario256.ttf");
 }
 
-main {
-  @apply flex w-full flex-col items-center;
-}
-
 .text-stroke {
   color: inherit;
   -webkit-text-fill-color: white; /* Will override color (regardless of order) */

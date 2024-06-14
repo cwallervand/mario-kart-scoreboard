@@ -1,4 +1,4 @@
-import { Heading } from "~/components/Heading";
+import { Main } from "~/components/Main";
 
 import { db } from "~/server/db";
 import { GoTo } from "~/components/GoTo";
@@ -7,10 +7,9 @@ const PlayersPage = async () => {
   const players = await db.query.players.findMany();
   console.log(players);
   return (
-    <main>
-      <Heading level={1}>Races</Heading>
+    <Main heading="Races">
       <GoTo href="/races/new">Register new race</GoTo>
-    </main>
+    </Main>
   );
 };
 

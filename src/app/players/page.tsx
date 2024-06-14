@@ -1,16 +1,15 @@
 import "next/link";
 import { GoTo } from "~/components/GoTo";
-import { Heading } from "~/components/Heading";
 import { Thead, Tr } from "~/components/Table";
 import { prettifyPlayerName } from "~/app/lib/utils";
 import { getAllPlayers } from "~/server/data";
+import { Main } from "~/components/Main";
 
 const PlayersPage = async () => {
   const players = await getAllPlayers();
   console.log(players);
   return (
-    <main className="flex w-full flex-col items-center">
-      <Heading level={1}>Players</Heading>
+    <Main heading="Players">
       <GoTo href="/players/new" className="mb-4 self-start">
         Register new player
       </GoTo>
@@ -24,7 +23,7 @@ const PlayersPage = async () => {
           ))}
         </tbody>
       </table>
-    </main>
+    </Main>
   );
 };
 

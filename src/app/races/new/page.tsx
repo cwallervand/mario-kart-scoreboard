@@ -6,30 +6,26 @@ import { finishingPositionsWithScore } from "~/app/lib/utils";
 import { db } from "~/server/db";
 import { SubmitButton } from "~/components/SubmitButton";
 import { GoTo } from "~/components/GoTo";
-import { Heading } from "~/components/Heading";
+import { Main } from "~/components/Main";
 
 const RegisterRacePage = async () => {
   const players = await db.query.players.findMany();
 
   return (
-    <main className="flex w-full flex-col">
+    <Main heading="Register new race">
       {players.length == 0 ? (
         <NoPlayers />
       ) : (
-        <>
-          <Heading level={1}>Register new race</Heading>
-          <form action={createRace}>
-            <TracksSelect className="mb-6" />
-            <PlayerFieldset playerNumber="1" />
-            <PlayerFieldset playerNumber="2" />
-            <PlayerFieldset playerNumber="3" />
-            <PlayerFieldset playerNumber="4" />
-
-            <SubmitButton />
-          </form>
-        </>
+        <form action={createRace}>
+          <TracksSelect className="mb-6" />
+          <PlayerFieldset playerNumber="1" />
+          <PlayerFieldset playerNumber="2" />
+          <PlayerFieldset playerNumber="3" />
+          <PlayerFieldset playerNumber="4" />
+          <SubmitButton />
+        </form>
       )}
-    </main>
+    </Main>
   );
 };
 
