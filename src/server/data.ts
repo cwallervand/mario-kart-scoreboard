@@ -1,27 +1,26 @@
+"use server";
 import { db } from "~/server/db";
 
-import { sql, eq, asc, desc } from "drizzle-orm";
-// import { unstable_noStore as noStore } from "next/cache";
+import { sql, eq } from "drizzle-orm";
 import {
   players as playersSchema,
   raceParticipations,
 } from "~/server/db/schema";
 import type { Player } from "~/app/models";
-// SELECT
-//   "mario-kart-scoreboard_race_participations"."playerId",
-//   AVG(
-//     "mario-kart-scoreboard_race_participations"."score"
-//   ) AS "avgScore",
-//   AVG(
-//     "mario-kart-scoreboard_race_participations"."finishingPosition"
-//   ) AS "avgFinishingPosition",
-//   "mario-kart-scoreboard_players"."name"
-// FROM
-//   "mario-kart-scoreboard_race_participations"
-// FULL JOIN "mario-kart-scoreboard_players" ON "mario-kart-scoreboard_players"."id" = "mario-kart-scoreboard_race_participations"."playerId"
-// GROUP BY
-//   "mario-kart-scoreboard_race_participations"."playerId",
-//   "mario-kart-scoreboard_players"."name";
+
+export const getAllPlayers = async (): Promise<Player[]> => {
+  try {
+    const result = await db.query.players.findMany();
+    const players = result.map((player) => ({
+      id: player.id.toString(),
+      name: player.name,
+      handle: player.handle ?? undefined,
+    }));
+    return players;
+  } catch (error) {
+    throw new Error("Failed to get players");
+  }
+};
 
 export const getAllTimeLeaderboard = async (): Promise<Player[]> => {
   try {
@@ -46,7 +45,7 @@ export const getAllTimeLeaderboard = async (): Promise<Player[]> => {
         sql`AVG(${raceParticipations.score}) desc, AVG(${raceParticipations.finishingPosition}) asc`,
       );
 
-    const players = queryResult.map(
+    const leaderboard = queryResult.map(
       (row) =>
         ({
           id: row.playerId,
@@ -57,7 +56,7 @@ export const getAllTimeLeaderboard = async (): Promise<Player[]> => {
         }) as Player,
     );
 
-    return players;
+    return leaderboard;
   } catch (error) {
     throw new Error("Failed to get leaderboard");
   }

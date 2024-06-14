@@ -1,6 +1,7 @@
 import { getAllTimeLeaderboard } from "~/server/data";
-import { prettifyPlayerName } from "./lib/utils";
+import { prettifyPlayerName } from "~/app/lib/utils";
 import { Heading } from "~/components/Heading";
+import { Thead, Tr } from "~/components/Table";
 
 export default async function ScoreboardPage() {
   const leaderboard = await getAllTimeLeaderboard();
@@ -9,35 +10,21 @@ export default async function ScoreboardPage() {
       <Heading level={1}>All the stats</Heading>
       <Heading level={2}>All-time leaderboard</Heading>
       <table className="w-full table-auto">
-        <thead>
-          <tr className="text-stroke text-stroke-width-1 h-12 align-top font-mario md:text-xl">
-            <TableHead className="text-left">Player</TableHead>
-            <TableHead className="text-right">Avg finishing position</TableHead>
-            <TableHead className="text-right">Avg race score</TableHead>
-          </tr>
-        </thead>
+        <Thead
+          thNames={["Player", "Avg finishing position", "Avg race score"]}
+        />
         <tbody>
           {leaderboard.map((result) => (
-            <tr key={result.id} className="h-9">
+            <Tr key={result.id}>
               <td className="text-left">
                 {prettifyPlayerName(result.name, result.handle)}
               </td>
               <td className="text-right">{result.avgFinishingPosition}</td>
               <td className="text-right">{result.avgScore}</td>
-            </tr>
+            </Tr>
           ))}
         </tbody>
       </table>
     </main>
   );
 }
-
-const TableHead = ({
-  className,
-  children,
-}: {
-  className?: string;
-  children: React.ReactNode;
-}) => (
-  <th className={`underline-wavy decoration-1 ${className}`}>{children}</th>
-);
