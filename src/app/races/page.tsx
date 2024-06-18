@@ -1,16 +1,20 @@
-import { Main } from "~/components/Main";
+import { currentUser } from "@clerk/nextjs/server";
 
-import { db } from "~/server/db";
+import { Main } from "~/components/Main";
 import { GoTo } from "~/components/GoTo";
 
-const PlayersPage = async () => {
-  const players = await db.query.players.findMany();
-  console.log(players);
+const RacesPages = async () => {
+  const cu = await currentUser();
+  const userCanRegisterRaces = !!cu?.privateMetadata.canRegisterRaces;
   return (
     <Main heading="Races">
-      <GoTo href="/races/new">Register new race</GoTo>
+      {userCanRegisterRaces && (
+        <GoTo href="/races/new" className="mb-4 self-start">
+          Register new race
+        </GoTo>
+      )}
     </Main>
   );
 };
 
-export default PlayersPage;
+export default RacesPages;

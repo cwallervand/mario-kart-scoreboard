@@ -1,6 +1,13 @@
-import { ClerkProvider, SignedIn, UserButton } from "@clerk/nextjs";
+import {
+  ClerkProvider,
+  SignedIn,
+  SignedOut,
+  UserButton,
+  SignInButton,
+} from "@clerk/nextjs";
 import "~/styles/globals.css";
 import NavigationBar from "~/components/NavigationBar";
+import { User as UserIcon } from "~/components/Icons";
 
 import { GeistSans } from "geist/font/sans";
 
@@ -19,11 +26,18 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className={`${GeistSans.variable}`}>
         <body className="antialiased">
-          <header className="underline-wavy decoration-3 flex w-full flex-row justify-between bg-[#E52521] p-3 text-center font-mario text-xl text-white shadow sm:p-6 sm:text-4xl md:text-left">
+          <header className="underline-wavy decoration-3 flex w-full flex-row items-center justify-between bg-[#E52521] p-3 text-center font-mario text-xl text-white shadow sm:p-6 sm:text-4xl md:text-left">
             Mario Kart Scoreboard
             <SignedIn>
               <UserButton />
             </SignedIn>
+            <SignedOut>
+              <SignInButton>
+                <button>
+                  <UserIcon />
+                </button>
+              </SignInButton>
+            </SignedOut>
           </header>
           <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
             <div className="w-full flex-none bg-[#E52521]/65 md:w-48 md:p-6 md:shadow">
@@ -38,5 +52,3 @@ export default function RootLayout({
     </ClerkProvider>
   );
 }
-
-//flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2

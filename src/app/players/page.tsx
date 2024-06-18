@@ -1,4 +1,6 @@
+import { currentUser } from "@clerk/nextjs/server";
 import "next/link";
+
 import { GoTo } from "~/components/GoTo";
 import { Thead, Tr } from "~/components/Table";
 import { prettifyPlayerName } from "~/app/lib/utils";
@@ -7,12 +9,17 @@ import { Main } from "~/components/Main";
 
 const PlayersPage = async () => {
   const players = await getAllPlayers();
-  console.log(players);
+  const cu = await currentUser();
+  const userCanRegisterPlayers = !!cu?.privateMetadata.canRegisterPlayers;
+
   return (
     <Main heading="Players">
-      <GoTo href="/players/new" className="mb-4 self-start">
-        Register new player
-      </GoTo>
+      {userCanRegisterPlayers && (
+        <GoTo href="/players/new" className="mb-4 self-start">
+          Register new player
+        </GoTo>
+      )}
+
       <table className="w-full table-auto">
         <Thead thNames={["Name"]} />
         <tbody>
