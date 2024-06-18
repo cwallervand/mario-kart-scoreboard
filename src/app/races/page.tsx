@@ -2,6 +2,7 @@ import { currentUser } from "@clerk/nextjs/server";
 
 import { Main } from "~/components/Main";
 import { GoTo } from "~/components/GoTo";
+import { NoData } from "~/components/NoData";
 
 const RacesPages = async () => {
   const cu = await currentUser();
