@@ -24,6 +24,7 @@ export const getAllPlayers = async (): Promise<Player[]> => {
 
 export const getAllTimeLeaderboard = async (): Promise<Player[]> => {
   try {
+    console.log("### getAllTimeLeaderboard ###");
     const queryResult = await db
       .select({
         name: sql`${playersSchema.name}`.mapWith(String),
@@ -44,6 +45,7 @@ export const getAllTimeLeaderboard = async (): Promise<Player[]> => {
       .orderBy(
         sql`AVG(${raceParticipations.score}) desc, AVG(${raceParticipations.finishingPosition}) asc`,
       );
+    console.log("queryResult", queryResult);
 
     const leaderboard = queryResult.map(
       (row) =>

@@ -5,8 +5,8 @@ import * as dotenv from "dotenv";
 
 dotenv.config({ path: "./.env" });
 
-if (!("DATABASE_URL" in process.env))
-  throw new Error("DATABASE_URL not found on .env");
+if (!("POSTGRES_URL" in process.env))
+  throw new Error("POSTGRES_URL not found on .env");
 
 const trackNames = [
   "3DS_DK_JUNGLE",
@@ -61,7 +61,7 @@ const trackNames = [
 const main = async () => {
   const Pool = pg.Pool;
   const client = new Pool({
-    connectionString: process.env.DATABASE_URL,
+    connectionString: process.env.POSTGRES_URL,
   });
 
   const db = drizzle(client);
