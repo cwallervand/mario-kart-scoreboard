@@ -1,16 +1,16 @@
-import { relations, sql } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import {
-  index,
+  // index,
   integer,
   pgTableCreator,
-  primaryKey,
+  // primaryKey,
   serial,
-  text,
+  // text,
   timestamp,
   varchar,
   unique,
 } from "drizzle-orm/pg-core";
-import { type AdapterAccount } from "next-auth/adapters";
+// import { type AdapterAccount } from "next-auth/adapters";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
