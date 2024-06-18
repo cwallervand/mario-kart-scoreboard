@@ -36,7 +36,7 @@ export const getAllTimeLeaderboard = async (): Promise<Player[]> => {
         handle: playersSchema.handle,
       })
       .from(raceParticipations)
-      .fullJoin(
+      .leftJoin(
         playersSchema,
         eq(playersSchema.id, raceParticipations.playerId),
       )
