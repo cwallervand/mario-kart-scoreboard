@@ -19,8 +19,16 @@ export default async function ScoreboardPage() {
               <td className="text-left">
                 {prettifyPlayerName(result.name, result.handle)}
               </td>
-              <td className="text-right">{result.avgFinishingPosition}</td>
-              <td className="text-right">{result.avgScore}</td>
+              <td className="text-right">
+                {result.avgFinishingPosition
+                  ? Number.parseFloat(result.avgFinishingPosition.toFixed(2))
+                  : "-"}
+              </td>
+              <td className="text-right">
+                {result.avgScore
+                  ? Number.parseFloat(result.avgScore.toFixed(2))
+                  : "-"}
+              </td>
             </Tr>
           ))}
         </tbody>
