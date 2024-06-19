@@ -23,7 +23,7 @@ export const PlayerFieldset = ({
   }));
 
   return (
-    <fieldset className="mb-12">
+    <fieldset className="mb-12 w-full">
       <legend className="text-lg">Player {playerNumber}</legend>
       <PlayerSelect
         players={players}

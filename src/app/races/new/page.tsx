@@ -54,7 +54,11 @@ const RegisterRacePage = ({ searchParams }: RegisterRacePageProps) => {
       {isPending ? (
         <p>Loading...</p>
       ) : (
-        <form ref={formRef} onSubmit={handleSubmit}>
+        <form
+          ref={formRef}
+          onSubmit={handleSubmit}
+          className="flex w-full flex-col items-start"
+        >
           <TracksSelect tracks={tracks} className="mb-6" ref={trackSelectRef} />
           {playerNumbers.map((playerNumber) => (
             <PlayerFieldset
@@ -66,16 +70,18 @@ const RegisterRacePage = ({ searchParams }: RegisterRacePageProps) => {
               }
             />
           ))}
-          <SubmitButton />
-          <button
-            type="button"
-            className="rounded-full  bg-yellow-600 px-5 py-2 text-white"
-            onClick={() => {
-              formRef.current?.reset();
-            }}
-          >
-            Reset
-          </button>
+          <div className="flew-row flex items-center justify-between">
+            <SubmitButton className="mr-4" />
+            <button
+              type="button"
+              className="rounded-full  bg-yellow-600 px-5 py-2 text-white"
+              onClick={() => {
+                formRef.current?.reset();
+              }}
+            >
+              Reset
+            </button>
+          </div>
         </form>
       )}
     </Main>
