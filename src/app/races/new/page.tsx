@@ -1,28 +1,81 @@
-import { createRace } from "~/server/serverActions";
-import { FormSelect } from "~/components/FormSelect";
-import { TracksSelect } from "~/components/TracksSelect";
-import { PlayerSelect } from "~/components/PlayerSelect";
-import { finishingPositionsWithScore } from "~/app/lib/utils";
-import { db } from "~/server/db";
-import { SubmitButton } from "~/components/SubmitButton";
-import { GoTo } from "~/components/GoTo";
-import { Main } from "~/components/Main";
+"use client";
+import { createRef, useEffect, useState, useTransition } from "react";
 
-const RegisterRacePage = async () => {
-  const players = await db.query.players.findMany();
+import { createRace } from "~/server/serverActions";
+import { TracksSelect } from "~/components/TracksSelect";
+import { PlayerFieldset } from "./_components/PlayerFieldset";
+import { SubmitButton } from "~/components/SubmitButton";
+import { Main } from "~/components/Main";
+import { getAllTracks, getAllPlayers } from "~/server/data";
+import type { Track, Player } from "~/app/models";
+
+interface RegisterRacePageProps {
+  searchParams: {
+    selectedPlayers?: string;
+  };
+}
+
+const RegisterRacePage = ({ searchParams }: RegisterRacePageProps) => {
+  const trackSelectRef = createRef<HTMLSelectElement>();
+  const formRef = createRef<HTMLFormElement>();
+  const [tracks, setTracks] = useState<Track[]>([]);
+  const [availablePlayers, setAvailablePlayers] = useState<Player[]>([]);
+  const [isPending, startTransition] = useTransition();
+
+  const preselectedPlayerIds = searchParams.selectedPlayers?.split(",");
+  const playerNumbers = ["1", "2", "3", "4"];
+
+  useEffect(() => {
+    const initiatePageData = () => {
+      startTransition(async () => {
+        const tracksResult = await getAllTracks();
+        const allPlayersResult = await getAllPlayers();
+
+        setTracks(tracksResult);
+        setAvailablePlayers(allPlayersResult);
+      });
+    };
+
+    void initiatePageData();
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    await createRace(formData);
+
+    if (trackSelectRef?.current) {
+      trackSelectRef.current.value = "";
+    }
+  };
 
   return (
     <Main heading="Register new race">
-      {players.length == 0 ? (
-        <NoPlayers />
+      {isPending ? (
+        <p>Loading...</p>
       ) : (
-        <form action={createRace}>
-          <TracksSelect className="mb-6" />
-          <PlayerFieldset playerNumber="1" />
-          <PlayerFieldset playerNumber="2" />
-          <PlayerFieldset playerNumber="3" />
-          <PlayerFieldset playerNumber="4" />
+        <form ref={formRef} onSubmit={handleSubmit}>
+          <TracksSelect tracks={tracks} className="mb-6" ref={trackSelectRef} />
+          {playerNumbers.map((playerNumber) => (
+            <PlayerFieldset
+              players={availablePlayers}
+              key={playerNumber}
+              playerNumber={playerNumber}
+              selectedPlayer={
+                preselectedPlayerIds?.[playerNumbers.indexOf(playerNumber)]
+              }
+            />
+          ))}
           <SubmitButton />
+          <button
+            type="button"
+            className="rounded-full  bg-yellow-600 px-5 py-2 text-white"
+            onClick={() => {
+              formRef.current?.reset();
+            }}
+          >
+            Reset
+          </button>
         </form>
       )}
     </Main>
@@ -30,33 +83,3 @@ const RegisterRacePage = async () => {
 };
 
 export default RegisterRacePage;
-
-const PlayerFieldset = ({ playerNumber }: { playerNumber: string }) => {
-  const finishingPositions = Object.keys(finishingPositionsWithScore);
-
-  const finishingPositionSelectOptions = finishingPositions.map((fp) => ({
-    value: fp,
-    label: fp,
-  }));
-
-  return (
-    <fieldset className="mb-12">
-      <legend className="text-lg">Player {playerNumber}</legend>
-      <PlayerSelect name={`id-p${playerNumber}`} className="mb-3" />
-      <FormSelect
-        label="Finishing position"
-        name={`finishing-position-p${playerNumber}`}
-        options={finishingPositionSelectOptions}
-      />
-    </fieldset>
-  );
-};
-
-const NoPlayers = () => (
-  <div>
-    <p>Woops, no players are registered.</p>
-    <p>
-      <GoTo href="/players/new">Create a new player</GoTo>
-    </p>
-  </div>
-);
