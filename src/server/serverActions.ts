@@ -26,13 +26,9 @@ const CreateRaceFormSchema = z.object({
 });
 
 export const createRace = async (formData: FormData) => {
-  console.log("--- createRace ---");
-  console.log("formData", formData);
-
   const validatedFields = CreateRaceFormSchema.parse(
     Object.fromEntries(formData.entries()),
   );
-  console.log("validatedFields", validatedFields);
 
   const raceData = {
     track: validatedFields.track,
@@ -77,11 +73,17 @@ export const createRace = async (formData: FormData) => {
       ];
 
       console.log("raceParticipationsData", raceParticipationsData);
-      // TODO: If this fails, delete teh created race
+      // TODO: If this fails, delete the created race
       await db.insert(raceParticipations).values(raceParticipationsData);
+      return {
+        message: "Race created",
+      };
     }
   } catch (error) {
     console.log("error", error);
+    return {
+      message: "Could not create race",
+    };
   }
 };
 
@@ -93,9 +95,6 @@ export const createPlayer = async (formData: FormData) => {
     await db.insert(players).values(validatedFields);
   } catch (error) {
     console.log("error", error);
-    // return {
-    //   message: "Could not create player",
-    // };
     throw new Error("Could not create player");
   }
 
