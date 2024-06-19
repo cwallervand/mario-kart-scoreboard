@@ -5,3 +5,7 @@ export type Player = {
   avgScore?: number;
   avgFinishingPosition?: number;
 };
+
+export type Track = {
+  name: string;
+};
