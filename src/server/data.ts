@@ -6,7 +6,7 @@ import {
   players as playersSchema,
   raceParticipations,
 } from "~/server/db/schema";
-import type { Player } from "~/app/models";
+import type { Player, Track } from "~/app/models";
 
 export const getAllPlayers = async (): Promise<Player[]> => {
   try {
@@ -22,9 +22,20 @@ export const getAllPlayers = async (): Promise<Player[]> => {
   }
 };
 
+export const getAllTracks = async (): Promise<Track[]> => {
+  try {
+    const result = await db.query.tracks.findMany();
+    const tracks = result.map((track) => ({
+      name: track.name,
+    }));
+    return tracks;
+  } catch (error) {
+    throw new Error("Failed to get tracks");
+  }
+};
+
 export const getAllTimeLeaderboard = async (): Promise<Player[]> => {
   try {
-    console.log("### getAllTimeLeaderboard ###");
     const queryResult = await db
       .select({
         name: sql`${playersSchema.name}`.mapWith(String),
