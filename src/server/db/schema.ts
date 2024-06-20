@@ -46,6 +46,7 @@ export const races = createTable("races", {
   date: timestamp("date", { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
+  heatId: varchar("heatId"),
 });
 
 export const raceParticipations = createTable(

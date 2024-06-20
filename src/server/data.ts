@@ -1,12 +1,55 @@
 "use server";
 import { db } from "~/server/db";
 
-import { sql, eq } from "drizzle-orm";
+import { sql, eq, isNull } from "drizzle-orm";
 import {
   players as playersSchema,
-  raceParticipations,
+  raceParticipations as raceParticipationsSchema,
+  races,
 } from "~/server/db/schema";
-import type { Player, Track } from "~/app/models";
+import type { Player, RaceParticipation, Track } from "~/app/models";
+
+export const getRaceParticipationsWithoutAHeat = async (): Promise<
+  RaceParticipation[]
+> => {
+  console.log("### getRaceParticipationsWithoutAHeat ###");
+  try {
+    const queryResult = await db
+      .select({
+        finishingPosition:
+          sql`${raceParticipationsSchema.finishingPosition}`.mapWith(Number),
+        playerName: sql`${playersSchema.name}`.mapWith(String),
+        raceId: sql`${races.id}`.mapWith(String),
+        track: sql`${races.track}`.mapWith(String),
+        registeredDate: races.date,
+      })
+      .from(raceParticipationsSchema)
+      .where(isNull(races.heatId))
+      .fullJoin(
+        playersSchema,
+        eq(playersSchema.id, raceParticipationsSchema.playerId),
+      )
+      .fullJoin(races, eq(races.id, raceParticipationsSchema.raceId))
+      .groupBy(
+        sql`${raceParticipationsSchema.finishingPosition},${playersSchema.name},${races.id}`,
+      );
+
+    const raceParticipations = queryResult.map(
+      (result) =>
+        ({
+          track: result.track,
+          playerName: result.playerName,
+          finishingPosition: result.finishingPosition,
+          registeredDate: result.registeredDate,
+          raceId: result.raceId,
+        }) as RaceParticipation,
+    );
+
+    return raceParticipations;
+  } catch (error) {
+    throw new Error("Failed to get race participations");
+  }
+};
 
 export const getAllPlayers = async (): Promise<Player[]> => {
   try {

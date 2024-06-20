@@ -9,3 +9,13 @@ export type Player = {
 export type Track = {
   name: string;
 };
+
+export type RaceParticipation = {
+  platyerId?: string;
+  playerName?: string;
+  finishingPosition?: number;
+  score?: number;
+  raceId: string;
+  track: string;
+  registeredDate: Date;
+};
