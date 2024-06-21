@@ -11,8 +11,8 @@ export type Track = {
 };
 
 export type RaceParticipation = {
-  platyerId?: string;
-  playerName?: string;
+  playerName: string;
+  playerHandle?: string;
   finishingPosition?: number;
   score?: number;
   raceId: string;

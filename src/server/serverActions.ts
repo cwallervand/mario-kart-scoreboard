@@ -2,7 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
+import { v4 as uuidv4 } from "uuid";
 
 import { db } from "~/server/db";
 import { players, races, raceParticipations } from "~/server/db/schema";
@@ -24,6 +26,33 @@ const CreateRaceFormSchema = z.object({
   "id-p4": z.coerce.number(),
   "finishing-position-p4": z.coerce.number(),
 });
+
+const RegisterRacesToHeatSchema = z.object({
+  raceIds: z.array(z.string()).length(4),
+});
+
+export const registerRacesToHeat = async (formData: FormData) => {
+  const validatedFields = RegisterRacesToHeatSchema.parse({
+    raceIds: formData.getAll("raceIds"),
+  });
+
+  try {
+    const heatId: string = uuidv4();
+    const raceIds = validatedFields.raceIds;
+    for (const raceId of raceIds) {
+      // TDOO: Use Promise.all or other method to batch up promises
+      await db
+        .update(races)
+        .set({ heatId })
+        .where(eq(races.id, Number(raceId)));
+    }
+  } catch (error) {
+    console.log("error", error);
+    throw new Error("Could not register races to heat");
+  }
+  revalidatePath("/");
+  redirect("/");
+};
 
 export const createRace = async (formData: FormData) => {
   const validatedFields = CreateRaceFormSchema.parse(

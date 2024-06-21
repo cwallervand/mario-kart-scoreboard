@@ -12,13 +12,14 @@ import type { Player, RaceParticipation, Track } from "~/app/models";
 export const getRaceParticipationsWithoutAHeat = async (): Promise<
   RaceParticipation[]
 > => {
-  console.log("### getRaceParticipationsWithoutAHeat ###");
   try {
     const queryResult = await db
       .select({
+        playerName: sql`${playersSchema.name}`.mapWith(String),
+        playerHandle: playersSchema.handle,
         finishingPosition:
           sql`${raceParticipationsSchema.finishingPosition}`.mapWith(Number),
-        playerName: sql`${playersSchema.name}`.mapWith(String),
+
         raceId: sql`${races.id}`.mapWith(String),
         track: sql`${races.track}`.mapWith(String),
         registeredDate: races.date,
@@ -31,7 +32,7 @@ export const getRaceParticipationsWithoutAHeat = async (): Promise<
       )
       .fullJoin(races, eq(races.id, raceParticipationsSchema.raceId))
       .groupBy(
-        sql`${raceParticipationsSchema.finishingPosition},${playersSchema.name},${races.id}`,
+        sql`${raceParticipationsSchema.finishingPosition},${playersSchema.name},${playersSchema.handle},${races.id}`,
       );
 
     const raceParticipations = queryResult.map(
@@ -39,6 +40,7 @@ export const getRaceParticipationsWithoutAHeat = async (): Promise<
         ({
           track: result.track,
           playerName: result.playerName,
+          playerHandle: result.playerHandle,
           finishingPosition: result.finishingPosition,
           registeredDate: result.registeredDate,
           raceId: result.raceId,
@@ -82,22 +84,23 @@ export const getAllTimeLeaderboard = async (): Promise<Player[]> => {
     const queryResult = await db
       .select({
         name: sql`${playersSchema.name}`.mapWith(String),
-        playerId: sql`${raceParticipations.playerId}`.mapWith(String),
-        avgScore: sql`avg(${raceParticipations.score})`.mapWith(Number),
-        avgFinishingPosition: sql`avg(${raceParticipations.finishingPosition})`
-          .mapWith(Number)
-          .as("avgFinishingPosition"),
         handle: playersSchema.handle,
+        playerId: sql`${raceParticipationsSchema.playerId}`.mapWith(String),
+        avgScore: sql`avg(${raceParticipationsSchema.score})`.mapWith(Number),
+        avgFinishingPosition:
+          sql`avg(${raceParticipationsSchema.finishingPosition})`
+            .mapWith(Number)
+            .as("avgFinishingPosition"),
       })
-      .from(raceParticipations)
+      .from(raceParticipationsSchema)
       .leftJoin(
         playersSchema,
-        eq(playersSchema.id, raceParticipations.playerId),
+        eq(playersSchema.id, raceParticipationsSchema.playerId),
       )
 
-      .groupBy(sql`${raceParticipations.playerId},${playersSchema.id}`)
+      .groupBy(sql`${raceParticipationsSchema.playerId},${playersSchema.id}`)
       .orderBy(
-        sql`AVG(${raceParticipations.score}) desc, AVG(${raceParticipations.finishingPosition}) asc`,
+        sql`AVG(${raceParticipationsSchema.score}) desc, AVG(${raceParticipationsSchema.finishingPosition}) asc`,
       );
     console.log("queryResult", queryResult);
 
