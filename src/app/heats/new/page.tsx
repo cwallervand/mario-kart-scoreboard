@@ -6,13 +6,6 @@ import { registerRacesToHeat } from "~/server/serverActions";
 import { prettifyPlayerName, prettifyTrackName } from "~/app/lib/utils";
 import { SubmitButton } from "~/components/SubmitButton";
 
-type RaceResult = {
-  track: string;
-  playerName: string;
-  raceId: string;
-  registeredDate: Date;
-};
-
 const RegisterHeatPage = async () => {
   const raceParticipations = await getRaceParticipationsWithoutAHeat();
   const groupedByRaceId = raceParticipations.reduce(
@@ -26,7 +19,7 @@ const RegisterHeatPage = async () => {
       }
       return acc;
     },
-    {} as Record<string, RaceResult[]>,
+    {} as Record<string, RaceParticipation[]>,
   );
   const renderRows = () => {
     return Object.keys(groupedByRaceId).map((raceId) => {
