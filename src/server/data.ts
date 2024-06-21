@@ -26,11 +26,11 @@ export const getRaceParticipationsWithoutAHeat = async (): Promise<
       })
       .from(raceParticipationsSchema)
       .where(isNull(races.heatId))
-      .fullJoin(
+      .leftJoin(
         playersSchema,
         eq(playersSchema.id, raceParticipationsSchema.playerId),
       )
-      .fullJoin(races, eq(races.id, raceParticipationsSchema.raceId))
+      .leftJoin(races, eq(races.id, raceParticipationsSchema.raceId))
       .groupBy(
         sql`${raceParticipationsSchema.finishingPosition},${playersSchema.name},${playersSchema.handle},${races.id}`,
       );

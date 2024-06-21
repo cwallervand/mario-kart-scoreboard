@@ -104,6 +104,9 @@ export const createRace = async (formData: FormData) => {
       console.log("raceParticipationsData", raceParticipationsData);
       // TODO: If this fails, delete the created race
       await db.insert(raceParticipations).values(raceParticipationsData);
+      revalidatePath("/");
+      revalidatePath("/heats/new");
+
       return {
         message: "Race created",
       };
