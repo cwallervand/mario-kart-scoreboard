@@ -9,6 +9,7 @@ import { SubmitButton } from "~/components/SubmitButton";
 // Reset forrm after submit and dont redirect to /
 const RegisterHeatPage = async () => {
   const raceParticipations = await getRaceParticipationsWithoutAHeat();
+  console.log("raceParticipations", raceParticipations);
   const groupedByRaceId = raceParticipations.reduce(
     (acc: Record<string, RaceParticipation[]>, result) => {
       const { raceId } = result;
