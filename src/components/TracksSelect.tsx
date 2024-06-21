@@ -1,14 +1,7 @@
 import { forwardRef } from "react";
 import { FormSelect } from "~/components/FormSelect";
 import type { Track } from "~/app/models";
-
-const WORD_SEPARATOR = "_";
-
-const prettifyTrackName = (trackName: string) => {
-  const prettifiedTrackName = trackName.replaceAll(WORD_SEPARATOR, " ");
-
-  return prettifiedTrackName;
-};
+import { prettifyTrackName } from "~/app/lib/utils";
 
 interface TrackSelectProps {
   tracks: Track[];

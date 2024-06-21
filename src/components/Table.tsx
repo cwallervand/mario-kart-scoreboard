@@ -6,7 +6,10 @@ export const Thead = ({ thNames }: TableHeadProps) => {
     <thead>
       <tr className="text-stroke text-stroke-width-1 h-12 align-top font-mario md:text-xl">
         {thNames.map((thName, index) => (
-          <Th key={thName} className={index === 0 ? "text-left" : "text-right"}>
+          <Th
+            key={`th-${index}-${thName}`}
+            className={index === 0 ? "text-left" : "text-right"}
+          >
             {thName}
           </Th>
         ))}
