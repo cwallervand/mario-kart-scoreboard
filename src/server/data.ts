@@ -1,7 +1,7 @@
 "use server";
 import { db } from "~/server/db";
 
-import { sql, eq, isNull } from "drizzle-orm";
+import { sql, eq, isNull, asc } from "drizzle-orm";
 import {
   players as playersSchema,
   raceParticipations as raceParticipationsSchema,
@@ -55,7 +55,9 @@ export const getRaceParticipationsWithoutAHeat = async (): Promise<
 
 export const getAllPlayers = async (): Promise<Player[]> => {
   try {
-    const result = await db.query.players.findMany();
+    const result = await db.query.players.findMany({
+      orderBy: [asc(playersSchema.name)],
+    });
     const players = result.map((player) => ({
       id: player.id.toString(),
       name: player.name,
