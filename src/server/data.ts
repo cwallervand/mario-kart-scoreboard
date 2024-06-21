@@ -79,6 +79,48 @@ export const getAllTracks = async (): Promise<Track[]> => {
   }
 };
 
+// SELECT DISTINCT
+//   "mario-kart-scoreboard_players"."name",
+//   "mario-kart-scoreboard_players"."handle",
+//   SUM(
+//     "mario-kart-scoreboard_race_participations"."score"
+//   )
+// FROM
+//   "mario-kart-scoreboard_race_participations"
+//   LEFT JOIN "mario-kart-scoreboard_players" ON "mario-kart-scoreboard_players"."id" = "mario-kart-scoreboard_race_participations"."playerId"
+//   LEFT JOIN "mario-kart-scoreboard_races" ON "mario-kart-scoreboard_races"."id" = "mario-kart-scoreboard_race_participations"."raceId"
+// GROUP BY
+//   "mario-kart-scoreboard_players"."id",
+//   "mario-kart-scoreboard_race_participations"."score",
+//   "mario-kart-scoreboard_races"."heatId"
+// HAVING
+//   SUM("mario-kart-scoreboard_race_participations"."score") = 60;
+
+export const getPlayersWithPerfectHeat = async (): Promise<Player[]> => {
+  try {
+    const queryResult = await db
+      .selectDistinct({
+        name: sql`${playersSchema.name}`.mapWith(String),
+        handle: playersSchema.handle,
+      })
+      .from(raceParticipationsSchema)
+      .leftJoin(
+        playersSchema,
+        eq(playersSchema.id, raceParticipationsSchema.playerId),
+      )
+      .leftJoin(races, eq(races.id, raceParticipationsSchema.raceId))
+
+      .groupBy(
+        sql`${playersSchema.id},${raceParticipationsSchema.score},${races.heatId}`,
+      )
+      .having(sql`sum(${raceParticipationsSchema.score}) = 60`);
+    console.log("queryResult", queryResult);
+    return [];
+  } catch (error) {
+    throw new Error("Failed to get players with perfect heat");
+  }
+};
+
 export const getAllTimeLeaderboard = async (): Promise<Player[]> => {
   try {
     const queryResult = await db
