@@ -22,3 +22,7 @@ export const getRaceScore = (finishingPosition: string | number): number => {
 export const prettifyPlayerName = (name: string, handle?: string) => {
   return `${name}${handle ? ` (${handle})` : ""}`;
 };
+
+const WORD_SEPARATOR = "_";
+export const prettifyTrackName = (trackName: string) =>
+  trackName.replaceAll(WORD_SEPARATOR, " ");
