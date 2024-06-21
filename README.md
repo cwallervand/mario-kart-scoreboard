@@ -2,7 +2,6 @@
 
 ## TODO
 
-- [] Clerk production
-- [] Own DB for prod
-- [] Missing data views
-- [] Improve UX for register race
+- Clerk production
+- Own DB for prod
+- More fun stats: perfect heat, worst heat, most consistent, etc.
