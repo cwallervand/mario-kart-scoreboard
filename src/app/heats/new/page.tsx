@@ -5,7 +5,8 @@ import type { RaceParticipation } from "~/app/models";
 import { registerRacesToHeat } from "~/server/serverActions";
 import { prettifyPlayerName, prettifyTrackName } from "~/app/lib/utils";
 import { SubmitButton } from "~/components/SubmitButton";
-
+// TODO: Improve UX for form.
+// Reset forrm after submit and dont redirect to /
 const RegisterHeatPage = async () => {
   const raceParticipations = await getRaceParticipationsWithoutAHeat();
   const groupedByRaceId = raceParticipations.reduce(
