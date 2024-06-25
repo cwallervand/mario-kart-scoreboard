@@ -1,7 +1,4 @@
-import {
-  getAllTimeLeaderboard,
-  getPlayersWithPerfectHeat,
-} from "~/server/data";
+import { getAllTimeLeaderboard } from "~/server/data";
 import { prettifyPlayerName } from "~/app/lib/utils";
 import { Heading } from "~/components/Heading";
 import { Thead, Tr } from "~/components/Table";
@@ -10,7 +7,6 @@ import { NoData } from "~/components/NoData";
 
 export default async function ScoreboardPage() {
   const leaderboard = await getAllTimeLeaderboard();
-  const playersWithPerfectHeat = await getPlayersWithPerfectHeat();
   return (
     <Main heading="All the stats">
       <Heading level={2}>All-time leaderboard</Heading>
@@ -18,9 +14,7 @@ export default async function ScoreboardPage() {
         <NoData />
       ) : (
         <table className="w-full table-auto">
-          <Thead
-            thNames={["Player", "Avg finishing position", "Avg race score"]}
-          />
+          <Thead thNames={["Player", "Avg finishing position"]} />
           <tbody>
             {leaderboard.map((result) => (
               <Tr key={result.id}>
@@ -30,11 +24,6 @@ export default async function ScoreboardPage() {
                 <td className="text-right">
                   {result.avgFinishingPosition
                     ? Number.parseFloat(result.avgFinishingPosition.toFixed(2))
-                    : "-"}
-                </td>
-                <td className="text-right">
-                  {result.avgScore
-                    ? Number.parseFloat(result.avgScore.toFixed(2))
                     : "-"}
                 </td>
               </Tr>

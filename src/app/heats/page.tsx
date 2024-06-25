@@ -1,3 +1,5 @@
+import { currentUser } from "@clerk/nextjs/server";
+
 import { Main } from "~/components/Main";
 import { getAllHeatParticipations } from "~/server/data";
 import { Thead, Tr } from "~/components/Table";
@@ -48,11 +50,17 @@ const RegisterHeatPage = async () => {
     });
   };
 
+  const cu = await currentUser();
+  const userCanRegisterPlayers = !!cu?.privateMetadata.canRegisterPlayers;
+
   return (
     <Main heading="Register new heat">
-      <GoTo href="/heats/new" className="mb-4 self-start">
-        Register new heat
-      </GoTo>
+      {userCanRegisterPlayers && (
+        <GoTo href="/heats/new" className="mb-4 self-start">
+          Register new heat
+        </GoTo>
+      )}
+
       {heatParticipationsResult.length == 0 && <p>No heats registered yet</p>}
       {heatParticipationsResult.length > 0 && (
         <table className="w-full table-auto">

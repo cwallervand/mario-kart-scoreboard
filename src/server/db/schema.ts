@@ -1,16 +1,12 @@
 import { sql } from "drizzle-orm";
 import {
-  // index,
   integer,
   pgTableCreator,
-  // primaryKey,
   serial,
-  // text,
   timestamp,
   varchar,
   unique,
 } from "drizzle-orm/pg-core";
-// import { type AdapterAccount } from "next-auth/adapters";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -34,28 +30,6 @@ export const players = createTable(
   }),
 );
 
-export const tracks = createTable("tracks", {
-  name: varchar("name", { length: 128 }).primaryKey(),
-});
-
-export const races = createTable("races", {
-  id: serial("id").primaryKey(),
-  track: varchar("track")
-    .notNull()
-    .references(() => tracks.name),
-  date: timestamp("date", { withTimezone: true })
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  heatId: varchar("heatId"),
-});
-
-// export const heats = createTable("heats", {
-//   id: serial("id").primaryKey(),
-//   date: timestamp("date", { withTimezone: true })
-//     .default(sql`CURRENT_TIMESTAMP`)
-//     .notNull(),
-// });
-
 export const heatParticipations = createTable(
   "heat_participations",
   {
@@ -78,32 +52,6 @@ export const heatParticipations = createTable(
     ),
   }),
 );
-
-export const raceParticipations = createTable(
-  "race_participations",
-  {
-    id: serial("id").primaryKey(),
-    raceId: integer("raceId")
-      .notNull()
-      .references(() => races.id),
-    playerId: integer("playerId")
-      .notNull()
-      .references(() => players.id),
-    score: integer("score").notNull(),
-    finishingPosition: integer("finishingPosition").notNull(),
-  },
-  (t) => ({
-    uniquePlayers: unique("uniquePlayers").on(t.raceId, t.playerId),
-    uniqueFinishingPositions: unique("uniqueFinishingPositions").on(
-      t.raceId,
-      t.finishingPosition,
-    ),
-  }),
-);
-
-// export const playerRaceRelations = relations(players, ({ many }) => ({
-//   races: many(races),
-// }));
 
 // export const posts = createTable(
 //   "post",
