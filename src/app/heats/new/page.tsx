@@ -1,85 +1,40 @@
-import { Main } from "~/components/Main";
-import { getRaceParticipationsWithoutAHeat } from "~/server/data";
-import { Thead, Tr } from "~/components/Table";
-import type { RaceParticipation } from "~/app/models";
-import { registerRacesToHeat } from "~/server/serverActions";
-import { prettifyPlayerName, prettifyTrackName } from "~/app/lib/utils";
+import { createHeat } from "~/server/serverActions";
 import { SubmitButton } from "~/components/SubmitButton";
-// TODO: Improve UX for form.
-// Reset forrm after submit and dont redirect to /
-const RegisterHeatPage = async () => {
-  const raceParticipations = await getRaceParticipationsWithoutAHeat();
-  console.log("raceParticipations", raceParticipations);
-  const groupedByRaceId = raceParticipations.reduce(
-    (acc: Record<string, RaceParticipation[]>, result) => {
-      const { raceId } = result;
-      if (!acc[raceId]) {
-        acc[raceId] = [];
-      }
-      if (raceId) {
-        acc[raceId]!.push(result);
-      }
-      return acc;
-    },
-    {} as Record<string, RaceParticipation[]>,
-  );
-  const renderRows = () => {
-    return Object.keys(groupedByRaceId).map((raceId) => {
-      console.log("raceId", raceId);
-      const raceParticipations = groupedByRaceId[raceId];
-      return (
-        <Tr key={`race-${raceId}`}>
-          <td className="text-left">
-            {prettifyTrackName(raceParticipations?.[0]?.track ?? "")}
-          </td>
-          {raceParticipations?.map((rp) => (
-            <>
-              <td key={`${raceId}-${rp.playerName}`} className="text-right">
-                {`${prettifyPlayerName(rp.playerName, rp.playerHandle)} (#${rp.finishingPosition})`}
-              </td>
-            </>
-          ))}
-          <td className="text-right">
-            {raceParticipations?.[0]?.registeredDate.toLocaleString("nb-NO")}
-          </td>
-          <td className="text-right">
-            <input
-              type="checkbox"
-              id={`checkbox-${raceId}`}
-              value={raceId}
-              name="raceIds"
-            />
-          </td>
-        </Tr>
-      );
-    });
+import { PlayerFieldset } from "~/components/PlayerFieldset";
+import { Main } from "~/components/Main";
+import { getAllPlayers } from "~/server/data";
+
+interface RegisterRacePageProps {
+  searchParams: {
+    selectedPlayers?: string;
   };
+}
+
+const RegisterRacePage = async ({ searchParams }: RegisterRacePageProps) => {
+  const allPlayers = await getAllPlayers();
+  const preselectedPlayerIds = searchParams.selectedPlayers?.split(",");
+
+  const playerNumbers = ["1", "2", "3", "4"];
 
   return (
-    <Main heading="Register new heat">
-      {raceParticipations.length == 0 && (
-        <p>All races are registered in a heat</p>
-      )}
-      {raceParticipations.length > 0 && (
-        <form className="w-full" action={registerRacesToHeat}>
-          <table className="w-full table-auto">
-            <Thead
-              thNames={[
-                "Track",
-                "Player 1",
-                "Player 2",
-                "Player 3",
-                "Player 4",
-                "Date",
-              ]}
-            />
-            <tbody>{renderRows()}</tbody>
-          </table>
-          <SubmitButton />
-        </form>
-      )}
+    <Main heading="Register new race">
+      <form action={createHeat} className="flex w-full flex-col items-start">
+        {playerNumbers.map((playerNumber) => (
+          <PlayerFieldset
+            players={allPlayers}
+            key={playerNumber}
+            playerNumber={playerNumber}
+            selectedPlayer={
+              preselectedPlayerIds?.[playerNumbers.indexOf(playerNumber)]
+            }
+          />
+        ))}
+        <div className="flew-row flex items-center justify-between">
+          <SubmitButton className="mr-4" />
+        </div>
+      </form>
     </Main>
   );
 };
 
-export default RegisterHeatPage;
+export default RegisterRacePage;
