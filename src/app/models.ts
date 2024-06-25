@@ -19,3 +19,12 @@ export type RaceParticipation = {
   track: string;
   registeredDate: Date;
 };
+
+export type HeatParticipation = {
+  heatId: string;
+  heatDate: Date;
+  playerName: string;
+  playerHandle?: string;
+  finishingPosition: number;
+  score?: number;
+};
