@@ -3,7 +3,7 @@ import { createRef, useEffect, useState, useTransition } from "react";
 
 import { createRace } from "~/server/serverActions";
 import { TracksSelect } from "~/components/TracksSelect";
-import { PlayerFieldset } from "./_components/PlayerFieldset";
+import { PlayerFieldset } from "~/components/PlayerFieldset";
 import { SubmitButton } from "~/components/SubmitButton";
 import { Main } from "~/components/Main";
 import { getAllTracks, getAllPlayers } from "~/server/data";
