@@ -6,8 +6,52 @@ import {
   players as playersSchema,
   raceParticipations as raceParticipationsSchema,
   races,
+  heatParticipations as heatParticipationsSchema,
 } from "~/server/db/schema";
-import type { Player, RaceParticipation, Track } from "~/app/models";
+import type {
+  HeatParticipation,
+  Player,
+  RaceParticipation,
+  Track,
+} from "~/app/models";
+
+export const getAllHeatParticipations = async (): Promise<
+  HeatParticipation[]
+> => {
+  try {
+    const queryResult = await db
+      .select({
+        playerName: sql`${playersSchema.name}`.mapWith(String),
+        playerHandle: playersSchema.handle,
+        finishingPosition:
+          sql`${heatParticipationsSchema.finishingPosition}`.mapWith(Number),
+        score: sql`${heatParticipationsSchema.score}`.mapWith(Number),
+        heatId: sql`${heatParticipationsSchema.heatId}`.mapWith(String),
+        heatDate: heatParticipationsSchema.heatDate,
+      })
+      .from(heatParticipationsSchema)
+      .leftJoin(
+        playersSchema,
+        eq(playersSchema.id, heatParticipationsSchema.playerId),
+      )
+      .groupBy(
+        sql`${heatParticipationsSchema.id},${playersSchema.name},${playersSchema.handle}`,
+      );
+
+    const heatParticipations = queryResult.map((result) => ({
+      heatId: result.heatId,
+      playerName: result.playerName,
+      playerHandle: result.playerHandle,
+      finishingPosition: result.finishingPosition,
+      score: result.score,
+      heatDate: result.heatDate,
+    })) as HeatParticipation[];
+
+    return heatParticipations;
+  } catch (error) {
+    throw new Error("Failed to get heat participations");
+  }
+};
 
 export const getRaceParticipationsWithoutAHeat = async (): Promise<
   RaceParticipation[]
@@ -123,6 +167,7 @@ export const getPlayersWithPerfectHeat = async (): Promise<Player[]> => {
   }
 };
 
+// TODO: Rewrite to use heats participations data
 export const getAllTimeLeaderboard = async (): Promise<Player[]> => {
   try {
     const queryResult = await db
