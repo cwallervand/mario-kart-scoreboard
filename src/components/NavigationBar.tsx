@@ -8,8 +8,7 @@ import clsx from "clsx";
 const links = [
   { href: "/", label: "Stats" },
 
-  { href: "/races/new", label: "New race" },
-  { href: "/heats/new", label: "New heat" },
+  { href: "/heats", label: "Heats" },
   { href: "/players", label: "Players" },
 ];
 
