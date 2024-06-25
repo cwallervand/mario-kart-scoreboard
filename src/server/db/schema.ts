@@ -49,6 +49,36 @@ export const races = createTable("races", {
   heatId: varchar("heatId"),
 });
 
+// export const heats = createTable("heats", {
+//   id: serial("id").primaryKey(),
+//   date: timestamp("date", { withTimezone: true })
+//     .default(sql`CURRENT_TIMESTAMP`)
+//     .notNull(),
+// });
+
+export const heatParticipations = createTable(
+  "heat_participations",
+  {
+    id: serial("id").primaryKey(),
+    heatId: varchar("heatId").notNull(),
+    heatDate: timestamp("heatDate", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    playerId: integer("playerId")
+      .notNull()
+      .references(() => players.id),
+    finishingPosition: integer("finishingPosition").notNull(),
+    score: integer("score"),
+  },
+  (t) => ({
+    uniquePlayersInHeat: unique("uniquePlayersInHeat").on(t.heatId, t.playerId),
+    uniqueFinisingPositionsInHeat: unique("uniqueFinisingPositionsInHeat").on(
+      t.heatId,
+      t.finishingPosition,
+    ),
+  }),
+);
+
 export const raceParticipations = createTable(
   "race_participations",
   {
