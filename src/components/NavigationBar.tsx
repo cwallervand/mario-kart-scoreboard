@@ -20,7 +20,6 @@ const shouldUnderline = (pathname: string, href: string) => {
   return pathname.startsWith(href);
 };
 
-// TODO: Fix so that links in navbar is underlined for /new pages
 const NavigationBar = () => {
   const pathname = usePathname();
   return (

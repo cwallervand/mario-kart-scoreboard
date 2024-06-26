@@ -4,20 +4,20 @@ import { PlayerFieldset } from "~/components/PlayerFieldset";
 import { Main } from "~/components/Main";
 import { getAllPlayers } from "~/server/data";
 
-interface RegisterRacePageProps {
+interface RegisterHeatPageProps {
   searchParams: {
     selectedPlayers?: string;
   };
 }
 
-const RegisterRacePage = async ({ searchParams }: RegisterRacePageProps) => {
+const RegisterHeatPage = async ({ searchParams }: RegisterHeatPageProps) => {
   const allPlayers = await getAllPlayers();
   const preselectedPlayerIds = searchParams.selectedPlayers?.split(",");
 
   const playerNumbers = ["1", "2", "3", "4"];
 
   return (
-    <Main heading="Register new race">
+    <Main heading="Register new heat">
       <form action={createHeat} className="flex w-full flex-col items-start">
         {playerNumbers.map((playerNumber) => (
           <PlayerFieldset
@@ -37,4 +37,4 @@ const RegisterRacePage = async ({ searchParams }: RegisterRacePageProps) => {
   );
 };
 
-export default RegisterRacePage;
+export default RegisterHeatPage;

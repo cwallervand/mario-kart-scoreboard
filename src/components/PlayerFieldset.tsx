@@ -1,7 +1,6 @@
-import { FormSelect } from "~/components/FormSelect";
 import { PlayerSelect } from "~/components/PlayerSelect";
+import { FormInput } from "~/components/FormInput";
 
-import { finishingPositionsWithScore } from "~/app/lib/utils";
 import type { Player } from "~/app/models";
 
 interface PlayerFieldsetProps {
@@ -15,15 +14,8 @@ export const PlayerFieldset = ({
   playerNumber,
   selectedPlayer,
 }: PlayerFieldsetProps) => {
-  const finishingPositions = Object.keys(finishingPositionsWithScore);
-
-  const finishingPositionSelectOptions = finishingPositions.map((fp) => ({
-    value: fp,
-    label: fp,
-  }));
-
   return (
-    <fieldset className="mb-12 w-full">
+    <fieldset className="mb-6 w-full">
       <legend className="text-lg">Player {playerNumber}</legend>
       <PlayerSelect
         players={players}
@@ -31,11 +23,11 @@ export const PlayerFieldset = ({
         defaultValue={selectedPlayer}
         className="mb-3"
       />
-      <FormSelect
-        label="Finishing position"
+      <FormInput
         name={`finishing-position-p${playerNumber}`}
-        options={finishingPositionSelectOptions}
-        defaultValue={playerNumber}
+        label="Finishing position"
+        className="mb-6"
+        type="number"
       />
     </fieldset>
   );
