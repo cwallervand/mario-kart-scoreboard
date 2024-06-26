@@ -9,6 +9,7 @@ export type Player = {
 export type HeatParticipation = {
   heatId: string;
   heatDate: Date;
+  playerId: string;
   playerName: string;
   playerHandle?: string;
   finishingPosition: number;

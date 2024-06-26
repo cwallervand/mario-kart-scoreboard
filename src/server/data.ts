@@ -16,6 +16,7 @@ export const getAllHeatParticipations = async (): Promise<
       .select({
         playerName: sql`${playersSchema.name}`.mapWith(String),
         playerHandle: playersSchema.handle,
+        playerId: sql`${heatParticipationsSchema.playerId}`.mapWith(String),
         finishingPosition:
           sql`${heatParticipationsSchema.finishingPosition}`.mapWith(Number),
         score: sql`${heatParticipationsSchema.score}`.mapWith(Number),
@@ -29,17 +30,18 @@ export const getAllHeatParticipations = async (): Promise<
       )
       .groupBy(
         sql`${heatParticipationsSchema.id},${playersSchema.name},${playersSchema.handle}`,
-      );
+      )
+      .orderBy(sql`${heatParticipationsSchema.finishingPosition} asc`);
 
     const heatParticipations = queryResult.map((result) => ({
       heatId: result.heatId,
       playerName: result.playerName,
       playerHandle: result.playerHandle,
+      playerId: result.playerId,
       finishingPosition: result.finishingPosition,
       score: result.score,
       heatDate: result.heatDate,
     })) as HeatParticipation[];
-
     return heatParticipations;
   } catch (error) {
     throw new Error("Failed to get heat participations");
@@ -62,7 +64,6 @@ export const getAllPlayers = async (): Promise<Player[]> => {
   }
 };
 
-// TODO: Rewrite to use heats participations data
 export const getAllTimeLeaderboard = async (): Promise<Player[]> => {
   try {
     const queryResult = await db

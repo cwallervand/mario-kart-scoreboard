@@ -12,6 +12,7 @@ const links = [
   { href: "/players", label: "Players" },
 ];
 
+// TODO: Fix so that links in navbar is underlined for /new pages
 const NavigationBar = () => {
   const pathname = usePathname();
 
