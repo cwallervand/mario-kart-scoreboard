@@ -2,18 +2,14 @@ import { currentUser } from "@clerk/nextjs/server";
 
 import { Main } from "~/components/Main";
 import { getAllHeatParticipations } from "~/server/data";
-import { Thead, Tr } from "~/components/Table";
 import { GoTo } from "~/components/GoTo";
 import type { HeatParticipation } from "~/app/models";
 import { prettifyPlayerName } from "~/app/lib/utils";
-
-// TODO: Render heats in another way, table sucks
 
 const RegisterHeatPage = async () => {
   const heatParticipationsResult = await getAllHeatParticipations();
   const groupedByHeatId = heatParticipationsResult.reduce(
     (acc: Record<string, HeatParticipation[]>, result) => {
-      console.log("result", result);
       const { heatId } = result;
       if (!acc[heatId]) {
         acc[heatId] = [];
@@ -25,27 +21,38 @@ const RegisterHeatPage = async () => {
     },
     {} as Record<string, HeatParticipation[]>,
   );
-  console.log("groupedByHeatId", groupedByHeatId);
 
-  const renderRows = () => {
+  const renderListItems = () => {
     return Object.keys(groupedByHeatId).map((heatId) => {
       const heatParticipationsByHeatId = groupedByHeatId[heatId];
+      console.log("heatParticipationsByHeatId", heatParticipationsByHeatId);
+
+      if (
+        heatParticipationsByHeatId === undefined ||
+        heatParticipationsByHeatId.length === 0 ||
+        heatParticipationsByHeatId === null
+      ) {
+        return null;
+      }
+
       return (
-        <Tr key={`race-${heatId}`}>
-          {heatParticipationsByHeatId?.map((rp, index) => (
-            <>
-              <td
-                key={`${heatId}-${rp.playerName}`}
-                className={index === 0 ? "text-left" : "text-right"}
-              >
-                {`${prettifyPlayerName(rp.playerName, rp.playerHandle)} (#${rp.finishingPosition})`}
-              </td>
-            </>
-          ))}
-          <td className="text-right">
-            {heatParticipationsByHeatId?.[0]?.heatDate.toLocaleString("nb-NO")}
-          </td>
-        </Tr>
+        <li key={heatId} className="w-36">
+          <div className="rounded-md bg-[#E52521]/65 p-2 text-center font-bold text-white">
+            {heatParticipationsByHeatId?.[0]?.heatDate.toLocaleDateString(
+              "nb-NO",
+            ) ?? ""}
+          </div>
+          <div className="p-2">
+            {heatParticipationsByHeatId?.map((hp) => {
+              return (
+                <div key={`${heatId}-${hp.playerId}`} className="mb-1 flex">
+                  <b className="mr-2">{hp.finishingPosition}.</b>
+                  <span className="overflow-auto">{`${prettifyPlayerName(hp.playerName, hp.playerHandle)}`}</span>
+                </div>
+              );
+            })}
+          </div>
+        </li>
       );
     });
   };
@@ -63,12 +70,9 @@ const RegisterHeatPage = async () => {
 
       {heatParticipationsResult.length == 0 && <p>No heats registered yet</p>}
       {heatParticipationsResult.length > 0 && (
-        <table className="w-full table-auto">
-          <Thead
-            thNames={["Player 1", "Player 2", "Player 3", "Player 4", "Date"]}
-          />
-          <tbody>{renderRows()}</tbody>
-        </table>
+        <ul className="flex w-full flex-row flex-wrap justify-evenly gap-6">
+          {renderListItems()}
+        </ul>
       )}
     </Main>
   );
