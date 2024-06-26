@@ -12,10 +12,17 @@ const links = [
   { href: "/players", label: "Players" },
 ];
 
+const shouldUnderline = (pathname: string, href: string) => {
+  if (href === "/") {
+    return pathname === "/";
+  }
+
+  return pathname.startsWith(href);
+};
+
 // TODO: Fix so that links in navbar is underlined for /new pages
 const NavigationBar = () => {
   const pathname = usePathname();
-
   return (
     <nav className="flex flex-row items-center justify-around font-mario text-sm md:flex-col">
       {links.map((link) => {
@@ -26,7 +33,7 @@ const NavigationBar = () => {
             className={clsx(
               "text-stroke text-stroke-width-1 flex h-[48px] grow items-center justify-center gap-2 self-stretch p-2 text-lg decoration-wavy decoration-1 underline-offset-4 hover:text-xl hover:underline md:flex-none md:justify-center md:p-2 md:px-3",
               {
-                underline: pathname === link.href,
+                underline: shouldUnderline(pathname, link.href),
               },
             )}
           >

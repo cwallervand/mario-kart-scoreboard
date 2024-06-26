@@ -25,7 +25,6 @@ const RegisterHeatPage = async () => {
   const renderListItems = () => {
     return Object.keys(groupedByHeatId).map((heatId) => {
       const heatParticipationsByHeatId = groupedByHeatId[heatId];
-      console.log("heatParticipationsByHeatId", heatParticipationsByHeatId);
 
       if (
         heatParticipationsByHeatId === undefined ||
