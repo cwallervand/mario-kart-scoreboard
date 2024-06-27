@@ -27,15 +27,18 @@ const getHeadingTag = (level: number) => {
 };
 
 export const Heading = ({ level, children }: HeadingProps) => {
-  const classes = clsx("text-stroke text-stroke underline-wavy font-mario", {
-    "text-3xl mb-10 text-stroke-width-2 decoration-2 hidden md:block":
-      level === 1,
-    "text-2xl mb-8 text-stroke-width-1 decoration-1": level === 2,
-    "text-xl": level === 3,
-    "text-lg": level === 4,
-    "text-base": level === 5,
-    "text-sm": level === 6,
-  });
+  const classes = clsx(
+    "text-stroke text-stroke underline-wavy font-mario text-center",
+    {
+      "text-3xl mb-10 text-stroke-width-2 decoration-2 hidden md:block":
+        level === 1,
+      "text-2xl mb-8 text-stroke-width-1 decoration-1": level === 2,
+      "text-xl": level === 3,
+      "text-lg": level === 4,
+      "text-base": level === 5,
+      "text-sm": level === 6,
+    },
+  );
   const headingTag = getHeadingTag(level);
   const HeadingComponent = headingTag;
 

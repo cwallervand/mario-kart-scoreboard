@@ -101,3 +101,53 @@ export const getAllTimeLeaderboard = async (): Promise<Player[]> => {
     throw new Error("Failed to get leaderboard");
   }
 };
+
+export const getPlayersWithMostFirstPlaces = async (
+  resultLimit = 3,
+): Promise<
+  {
+    playerId: string;
+    playerName: string;
+    playerHandle?: string;
+    firstPlaceCount: number;
+  }[]
+> => {
+  console.log("### getPlayersWithMostFirstPlaces ###");
+  try {
+    const queryResult = await db
+      .select({
+        playerId: sql`${playersSchema.id}`.mapWith(String),
+        playerName: sql`${playersSchema.name}`.mapWith(String),
+        playerHandle: playersSchema.handle,
+        firstPlaceCount:
+          sql`COUNT(${heatParticipationsSchema.finishingPosition}) as firstPlaceCount`.mapWith(
+            Number,
+          ),
+      })
+      .from(playersSchema)
+      .leftJoin(
+        heatParticipationsSchema,
+        eq(playersSchema.id, heatParticipationsSchema.playerId),
+      )
+      .where(eq(heatParticipationsSchema.finishingPosition, 1))
+      .groupBy(
+        sql`${playersSchema.id},${playersSchema.name},${playersSchema.handle}`,
+      )
+      .orderBy(sql`firstPlaceCount desc`)
+      .limit(resultLimit);
+
+    const result = queryResult.map((result) => ({
+      playerName: result.playerName,
+      playerHandle: result.playerHandle,
+      firstPlaceCount: result.firstPlaceCount,
+    })) as {
+      playerId: string;
+      playerName: string;
+      playerHandle?: string;
+      firstPlaceCount: number;
+    }[];
+    return result;
+  } catch (error) {
+    throw new Error("Failed to get players with most first places");
+  }
+};
